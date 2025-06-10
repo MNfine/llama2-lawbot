@@ -20,8 +20,8 @@ INDEX_NAME = "idx:law"
 # (Redis Stack có sẵn module RediSearch và VECTOR HNSW)
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
-# Khởi tạo SentenceTransformer để tạo embedding (dim=384)
-sbert = SentenceTransformer("all-MiniLM-L6-v2")
+# Khởi tạo SentenceTransformer
+sbert = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 
 # --------------------------------------------
