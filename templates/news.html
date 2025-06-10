@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tin tức pháp luật mới nhất</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f7fa;
+            color: #1a237e;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .news-container {
+            max-width: 900px;
+            margin: 36px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(33, 150, 243, 0.10);
+            padding: 32px 24px 24px 24px;
+        }
+        h1 {
+            text-align: center;
+            color: #000000;
+            margin-bottom: 18px;
+            font-size: 2rem;
+        }
+        .news-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .news-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #e3f2fd;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.04);
+            transition: background 0.2s;
+        }
+        .news-item:hover {
+            background: #bbdefb;
+        }
+        .news-title {
+            font-weight: 600;
+            color: #0d47a1;
+            font-size: 1.08rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .news-date {
+            color: #666;
+            font-size: 0.98rem;
+            margin-left: 12px;
+        }
+        .download-link {
+            color: #388e3c;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid #388e3c;
+            border-radius: 16px;
+            padding: 4px 14px;
+            background: #e8f5e9;
+            transition: background 0.2s;
+            font-size: 0.98rem;
+        }
+        .download-link:hover {
+            background: #c8e6c9;
+        }
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+        .back-link .material-icons {
+            font-size: 20px;
+        }
+        @media (max-width: 600px) {
+            .news-container {
+                padding: 12px 2vw 12px 2vw;
+            }
+            h1 {
+                font-size: 1.2rem;
+            }
+            .news-title {
+                font-size: 1rem;
+            }
+        }
+        @media (max-width: 1024px) {
+            .news-container {
+                max-width: 95%;
+                margin: 20px auto;
+                padding: 20px 16px;
+            }
+            .news-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .download-link {
+                align-self: flex-end;
+            }
+        }
+        @media (max-width: 768px) {
+            #main-search-form, #news-filter-form {
+                margin-bottom: 12px;
+            }
+            #news-filter-form > div {
+                gap: 8px;
+            }
+            [style*="flex:2"] {
+                flex: 1 1 100% !important;
+                min-width: 100% !important;
+            }
+            button[type="submit"] {
+                width: 100%;
+                justify-content: center;
+            }
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .news-container {
+                margin: 10px auto;
+                padding: 16px 12px;
+                border-radius: 12px;
+            }
+            .news-title {
+                font-size: 0.95rem;
+            }
+            .news-date {
+                font-size: 0.85rem;
+            }
+            .download-link {
+                font-size: 0.9rem;
+                padding: 4px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="news-container">
+        <a href="{{ url_for('index') }}" class="back-link">
+            <span class="material-icons">arrow_back</span> Trang chủ
+        </a>
+        <h1> Tin tức pháp luật mới nhất</h1>
+
+        <!-- Thanh tìm kiếm chính -->
+        <form id="main-search-form" method="get" style="margin-bottom: 18px;">
+            {% for field in selected_fields %}
+            <input type="hidden" name="field" value="{{ field }}">
+            {% endfor %}
+            {% for doc_type in selected_types %}  
+            <input type="hidden" name="doc_type" value="{{ doc_type }}">
+            {% endfor %}
+            {% for agency in selected_agencies %}
+            <input type="hidden" name="agency" value="{{ agency }}"> 
+            {% endfor %}
+
+            <div style="display: flex; gap: 0;">
+                <input type="text" name="q" id="main-search-input"
+                       value="{{ request.args.get('q', '') }}"
+                       placeholder="Tìm kiếm theo tên văn bản..."
+                       style="flex:1; padding:10px 14px; border-radius:6px 0 0 6px; border:1.5px solid #bbb; font-size:0.98rem; border-right:none;">
+                <button type="submit" style="padding:0 16px; border-radius:0 6px 6px 0; background:#e07a5f; color:#fff; font-weight:600; border:1.5px solid #e07a5f; font-size:0.98rem; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                    <span class="material-icons" style="font-size:18px;">search</span>
+                    Tìm kiếm
+                </button>
+            </div>
+            <!-- Thêm thông báo số kết quả tìm được -->
+            {% if request.args.get('q') %}
+            <div style="margin-top:8px; color:#666; font-size:0.9rem;">
+                Tìm thấy {{ docs|length }} văn bản phù hợp với từ khóa "{{ request.args.get('q') }}"
+            </div>
+            {% endif %}
+        </form>
+
+        <!-- Bộ lọc -->
+        <form id="news-filter-form" method="get" style="margin-bottom: 24px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: flex-start;">
+                <span style="font-weight:600; min-width:50px;">Bộ lọc:</span>
+                <!-- Lĩnh vực tra cứu -->
+                <div style="flex:2; min-width:190px; position:relative;">
+                    <div style="position:relative;">
+                        <div onclick="toggleDropdown('field')" style="width:80%; padding:8px 12px; border-radius:6px; border:1.5px solid #bbb; font-size:0.95rem; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
+                            <span id="field-selected-label" style="font-size:0.95rem;">Tất cả lĩnh vực</span>
+                            <span class="material-icons" style="font-size:16px;">expand_more</span>
+                        </div>
+                        <div id="field-dropdown" style="display:none; position:absolute; top:38px; left:0; width:100%; background:#fff; border:1.5px solid #1976d2; border-radius:8px; max-height:260px; overflow:auto; z-index:30; box-shadow:0 2px 8px rgba(33,150,243,0.08);">
+                            <input type="text" id="field-search" placeholder="Tìm lĩnh vực..." style="width:80%; margin:6px 2%; padding:8px 10px; border-radius:6px; border:1px solid #bbb; font-size:1rem;">
+                            <div id="field-checkboxes" style="padding: 4px 0 8px 0;">
+                                <!-- JS sẽ render các checkbox ở đây -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tương tự cho type và agency, giảm kích thước tương tự -->
+                <div style="flex:2; min-width:190px; position:relative;">
+                    <div style="position:relative;">
+                        <div onclick="toggleDropdown('type')" style="width:80%; padding:8px 12px; border-radius:6px; border:1.5px solid #bbb; font-size:0.95rem; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
+                            <span id="type-selected-label" style="font-size:0.95rem;">Tất cả loại văn bản</span>
+                            <span class="material-icons" style="font-size:16px;">expand_more</span>
+                        </div>
+                        <div id="type-dropdown" style="display:none; position:absolute; top:38px; left:0; width:100%; background:#fff; border:1.5px solid #1976d2; border-radius:8px; max-height:260px; overflow:auto; z-index:20; box-shadow:0 2px 8px rgba(33,150,243,0.08);">
+                            <input type="text" id="type-search" placeholder="Tìm loại văn bản..." style="width:80%; margin:6px 2%; padding:8px 10px; border-radius:6px; border:1px solid #bbb; font-size:1rem;">
+                            <div id="type-checkboxes" style="padding: 4px 0 8px 0;">
+                                <!-- JS sẽ render các checkbox ở đây -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex:2; min-width:190px; position:relative;">
+                    <div style="position:relative;">
+                        <div onclick="toggleDropdown('agency')" style="width:80%; padding:8px 12px; border-radius:6px; border:1.5px solid #bbb; font-size:0.95rem; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
+                            <span id="agency-selected-label" style="font-size:0.95rem;">Tất cả cơ quan</span>
+                            <span class="material-icons" style="font-size:16px;">expand_more</span>
+                        </div>
+                        <div id="agency-dropdown" style="display:none; position:absolute; top:38px; left:0; width:100%; background:#fff; border:1.5px solid #1976d2; border-radius:8px; max-height:260px; overflow:auto; z-index:10; box-shadow:0 2px 8px rgba(33,150,243,0.08);">
+                            <input type="text" id="agency-search" placeholder="Tìm cơ quan ban hành..." style="width:80%; margin:6px 2%; padding:8px 10px; border-radius:6px; border:1px solid #bbb; font-size:1rem;">
+                            <div id="agency-checkboxes" style="padding: 4px 0 8px 0;">
+                                <!-- JS sẽ render các checkbox ở đây -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" style="padding:8px 16px; border-radius:6px; background:#1565c0; color:#fff; font-weight:600; border:none; font-size:0.95rem; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                    <span class="material-icons" style="font-size:16px;">search</span>
+                    Tìm kiếm
+                </button>
+            </div>
+        </form>
+
+        <ul class="news-list">
+            {% for doc in docs %}
+            <li class="news-item">
+                <div>
+                    <span class="news-title">
+                        <span class="material-icons" style="font-size:20px;color:#1976d2;">description</span>
+                        {{ doc.name }}
+                    </span>
+                    <span class="news-date">{{ doc.mtime | datetimeformat }}</span>
+                    
+                    <!-- Hiển thị nhãn metadata -->
+                    <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                        {% if doc.category %}
+                        <span style="background:#ffe0b2; padding:2px 8px; border-radius:12px; font-size:0.85rem; color:#b26a00;">
+                            {{ doc.category }}
+                        </span>
+                        {% endif %}
+                        
+                        {% if doc.field %}
+                        <span style="background:#e3f2fd; padding:2px 8px; border-radius:12px; font-size:0.85rem;">
+                            {{ doc.field }}
+                        </span>
+                        {% endif %}
+                        
+                        {% if doc.doc_type %}
+                        <span style="background:#e8f5e9; padding:2px 8px; border-radius:12px; font-size:0.85rem;">
+                            {{ doc.doc_type }}
+                        </span>
+                        {% endif %}
+
+                        {% if doc.agency %}
+                        <span style="background:#fff3e0; padding:2px 8px; border-radius:12px; font-size:0.85rem;">
+                            {{ doc.agency }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <a class="download-link" href="{{ url_for('download_plain_text', filename=doc.filename) }}">
+                    <span class="material-icons" style="font-size:18px;">download</span>
+                    Tải về
+                </a>
+            </li>
+            {% else %}
+            <li style="text-align:center; color:#888; padding: 24px 0;">
+                {% if selected_fields or selected_types or selected_agencies %}
+                    Không tìm thấy văn bản phù hợp với bộ lọc đã chọn.
+                {% else %}
+                    Chưa có văn bản nào được cập nhật.
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        // Danh sách lọc mới
+        const fieldOptions = [
+            "Hành chính", "Dân sự", "Hình sự", "Lao động",
+            "Đất đai", "Thuế", "Xây dựng", "Doanh nghiệp",
+            "Đầu tư", "Thương mại", "Môi trường", "Giáo dục",  
+            "Y tế", "Giao thông", "Bảo hiểm"
+        ];
+
+        const typeOptions = [
+            "Luật", "Nghị định", "Thông tư", "Quyết định", 
+            "Nghị quyết", "Chỉ thị", "Công văn", "Văn bản hợp nhất"
+        ];
+
+        const agencyOptions = [
+            "Quốc hội", "Chính phủ", "Thủ tướng Chính phủ",
+            "Bộ Tài chính", "Bộ Tư pháp", "Bộ Công an",
+            "Bộ Y tế", "Bộ Giáo dục", "Bộ Xây dựng",
+            "TAND Tối cao", "VKSND Tối cao"
+        ];
+
+        // Hàm render checkbox từ mảng options
+        function renderCheckboxes(options, boxId, name, labelId) {
+            var box = document.getElementById(boxId);
+            box.innerHTML = '';
+            options.forEach(function(opt, i) {
+                var id = name + "-cb-" + i;
+                var inputName = name === 'type' ? 'doc_type' : name;
+                box.innerHTML += `<label style="display:block; padding:6px 12px; cursor:pointer; transition:background 0.2s; hover:background:#f5f5f5">
+                    <input type="checkbox" value="${opt}" name="${inputName}" style="margin-right:8px;" onchange="updateSelectedLabel('${name}', '${labelId}', ${JSON.stringify(options)})">
+                    ${opt}
+                </label>`;
+            });
+        }
+
+        // Dropdown logic
+        function toggleDropdown(type) {
+            var dropdown = document.getElementById(type + '-dropdown');
+            var currentDisplay = dropdown.style.display;
+            
+            // Đóng tất cả dropdown khác
+            ['field', 'type', 'agency'].forEach(function(t) {
+                if(t !== type) {
+                    document.getElementById(t + '-dropdown').style.display = 'none';
+                }
+            });
+
+            // Toggle dropdown hiện tại
+            dropdown.style.display = currentDisplay === 'block' ? 'none' : 'block';
+            
+            // Focus vào ô tìm kiếm nếu mở dropdown
+            if(dropdown.style.display === 'block') {
+                document.getElementById(type + '-search').focus();
+                
+                // Render lại checkbox mỗi khi mở dropdown
+                var options = type === 'field' ? fieldOptions : 
+                             type === 'type' ? typeOptions : agencyOptions;
+                renderCheckboxes(options, type + '-checkboxes', type, type + '-selected-label');
+            }
+        }
+
+        // Xử lý click outside để đóng dropdown
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#news-filter-form')) {
+                ['field', 'type', 'agency'].forEach(function(type) {
+                    document.getElementById(type + '-dropdown').style.display = 'none';
+                });
+            }
+        });
+
+        // Ngăn sự kiện click trong dropdown lan ra ngoài
+        ['field', 'type', 'agency'].forEach(function(type) {
+            document.getElementById(type + '-dropdown').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+
+        function filterCheckboxes(inputId, boxId) {
+            var input = document.getElementById(inputId).value.toLowerCase().trim();
+            var box = document.getElementById(boxId);
+            var labels = box.querySelectorAll('label');
+            var found = false;
+            
+            labels.forEach(function(label) {
+                var txt = label.textContent.toLowerCase();
+                // Tìm kiếm partial match thay vì exact match
+                if (txt.indexOf(input) !== -1) {
+                    label.style.display = 'block';
+                    found = true;
+                } else {
+                    label.style.display = 'none';
+                }
+            });
+
+            // Thông báo nếu không tìm thấy kết quả
+            var noResults = box.querySelector('.no-results');
+            if (!noResults) {
+                noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.style.padding = '8px 12px';
+                noResults.style.color = '#666';
+                noResults.style.fontStyle = 'italic';
+                box.appendChild(noResults);
+            }
+            noResults.style.display = !found && input ? 'block' : 'none';
+            noResults.textContent = 'Không tìm thấy kết quả';
+        }
+
+        function updateSelectedLabel(name, labelId, options) {
+            var checked = [];
+            var box = document.getElementById(name + '-checkboxes');
+            var cbs = box.querySelectorAll('input[type=checkbox]:checked');
+            
+            cbs.forEach(function(cb) {
+                checked.push(cb.value);
+            });
+
+            var label = document.getElementById(labelId);
+            if (checked.length === 0) {
+                label.textContent = name === 'field' ? 'Tất cả lĩnh vực' : 
+                                  name === 'type' ? 'Tất cả loại văn bản' : 'Tất cả cơ quan';
+            } else {
+                label.textContent = checked.join(', ');
+            }
+        }
+
+        // Prevent dropdown from closing when clicking search input
+        ['field', 'type', 'agency'].forEach(function(type) {
+            document.getElementById(type + '-search').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+
+        // Khởi tạo và render checkbox khi trang load
+        window.addEventListener('DOMContentLoaded', function() {
+            ['field', 'type', 'agency'].forEach(function(type) {
+                var options = type === 'field' ? fieldOptions :
+                             type === 'type' ? typeOptions : agencyOptions;
+                             
+                // Thêm sự kiện tìm kiếm
+                document.getElementById(type + '-search').addEventListener('input', function() {
+                    filterCheckboxes(type + '-search', type + '-checkboxes');
+                });
+
+                // Render checkbox ban đầu
+                renderCheckboxes(options, type + '-checkboxes', type, type + '-selected-label');
+            });
+        });
+    </script>
+</body>
+</html>

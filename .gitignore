@@ -1,0 +1,15 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Environment & secrets
+.env
+
+# Logs & databases
+*.log
+*.db
+*.sqlite3
+
+# Output
+qlora_lawbot_output/

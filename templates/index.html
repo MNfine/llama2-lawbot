@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>LawBot – Chat Pháp Luật Việt Nam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background: #fffcf9; /* Changed to a single light color */
+            color: #2c3e50;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+        }
+        h1 {
+            color: #2c3e50; /* Removed gradient */
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 2.2em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 1.1rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        .subtitle:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #e07a5f, #f2cc8f);
+            border-radius: 2px;
+        }
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            border-left: 4px solid #d32f2f;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease;
+        }
+        label {
+            font-weight: 600;
+            display: flex;
+            align-items: center; /* Fixed alignment */
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        textarea {
+            width: 95%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            resize: vertical;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            background: #fff;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        textarea:focus {
+            border-color: #e07a5f;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(224,122,95,0.1);
+        }
+        .custom-file-input {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 320px;
+            margin-top: 8px;
+        }
+        .custom-file-input input[type="file"] {
+            position: absolute;
+            left: 0; 
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #fff;
+            color: #2196f3;
+            border: 2px solid #2196f3;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(33,150,243,0.1);
+        }
+        .file-label:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(33,150,243,0.2);
+        }
+        .file-label .material-icons {
+            font-size: 20px;
+        }
+        .file-name {
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.95rem;
+            padding-left: 4px;
+        }
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #e07a5f 0%, #f2cc8f 100%);
+            color: #fff;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(224,122,95,0.2);
+            line-height: 1.2;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224,122,95,0.3);
+            background: linear-gradient(135deg, #d06650 0%, #e07a5f 100%);
+        }
+        button .material-icons {
+            font-size: 22px;
+            /* Đảm bảo icon căn giữa với text */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            margin-bottom: 0;
+            margin-right: 2px;
+        }
+        /* Căn chỉnh icon trong các label */
+        label .material-icons,
+        .section h2 .material-icons,
+        .logo .material-icons,
+        .file-label .material-icons {
+            font-size: 20px;
+            vertical-align: middle;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .answer {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 1.08rem;
+            line-height: 1.6;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-left: 4px solid #e07a5f;
+            animation: slideIn 0.3s ease;
+        }
+        .answer p {
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 2px solid rgba(224,122,95,0.2);
+        }
+        .extracted {
+            background: #f9f9f9;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 1.08rem;
+            line-height: 1.6;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-left: 4px solid #f2cc8f;
+            animation: slideIn 0.3s ease;
+        }
+        .section {
+            margin-bottom: 32px;
+            animation: fadeIn 0.5s ease;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section h2 .material-icons {
+            color: #e07a5f;
+            font-size: 24px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 20px auto 20px;
+            background: #fff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(224,122,95,0.1);
+            animation: float 4s ease-in-out infinite;
+            border: 1px solid rgba(224,122,95,0.1);
+        }
+        .logo .material-icons {
+            font-size: 40px;
+            color: #e07a5f;
+            opacity: 0.9;
+        }
+        @keyframes typing {
+            0% { width: 0; }
+            50% { width: 50%; }
+            100% { width: 100%; }
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div></div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="{{ url_for('lawyer') }}" style="display: flex; align-items: center; gap: 6px; color: #1565c0; text-decoration: none; font-weight: 600; font-size: 1.08rem; border: 1.5px solid #1565c0; border-radius: 20px; padding: 6px 18px; background: #e3f2fd; transition: background 0.2s;">
+                    <span class="material-icons" style="font-size: 22px;">gavel</span>
+                    Luật sư
+                </a>
+                <a href="{{ url_for('news') }}" style="display: flex; align-items: center; gap: 6px; color: #388e3c; text-decoration: none; font-weight: 600; font-size: 1.08rem; border: 1.5px solid #388e3c; border-radius: 20px; padding: 6px 18px; background: #e8f5e9; transition: background 0.2s;">
+                    <span class="material-icons" style="font-size: 22px;">article</span>
+                    Tin tức
+                </a>
+                {% if current_user.is_authenticated %}
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="material-icons" style="font-size: 28px; color: #e07a5f;">account_circle</span>
+                        <span style="font-weight: 600;">{{ current_user.username }}</span>
+                        <a href="{{ url_for('logout') }}" style="margin-left: 12px; color: #e07a5f; text-decoration: none; font-weight: 500;">Đăng xuất</a>
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('login') }}" style="display: flex; align-items: center; gap: 6px; color: #e07a5f; text-decoration: none; font-weight: 500;">
+                        <span class="material-icons" style="font-size: 28px;">account_circle</span>
+                        Đăng nhập
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="logo">
+            <span class="material-icons">balance</span>
+        </div>
+        <h1>LawBot – Chat Pháp Luật Việt Nam</h1>
+        <div class="subtitle">Trợ lý thông minh hỗ trợ tra cứu và tư vấn pháp luật</div>
+
+        {% if error %}
+            <div class="error">
+                <span class="material-icons">error_outline</span>
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="section">
+                <label for="query">
+                    <span class="material-icons">help_outline</span>
+                    Nhập câu hỏi của bạn:
+                </label>
+                <textarea 
+                    name="query" 
+                    id="query" 
+                    rows="3" 
+                    placeholder="Ví dụ: Khi nào tôi bị phạt tiền khi kinh doanh bất động sản chưa cấp phép?"
+                >{{ query or '' }}</textarea>
+            </div>
+
+            <div class="section">
+                <label for="image">
+                    <span class="material-icons">upload_file</span>
+                    Hoặc tải lên ảnh/PDF văn bản luật:
+                </label>
+                <div class="custom-file-input">
+                    <label class="file-label" for="image">
+                        <span class="material-icons">attach_file</span>
+                        Chọn tệp ảnh hoặc PDF...
+                    </label>
+                    <input type="file" name="image" id="image" accept=".jpg,.jpeg,.png,.pdf" onchange="updateFileName()">
+                    <div class="file-name" id="file-name"></div>
+                </div>
+            </div>
+
+            <button type="submit">
+                <span class="material-icons">send</span>
+                Gửi câu hỏi
+            </button>
+        </form>
+
+        {% if extracted_text %}
+            <div class="section">
+                <h2>
+                    <span class="material-icons">description</span>
+                    Văn bản đã trích xuất:
+                </h2>
+                <div class="extracted">{{ extracted_text }}</div>
+            </div>
+        {% endif %}
+
+        {% if answer %}
+            <div class="section">
+                <h2>
+                    <span class="material-icons">psychology</span>
+                    LawBot trả lời:
+                </h2>
+                <div class="answer">{{ answer }}</div>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function updateFileName() {
+            var input = document.getElementById('image');
+            var fileName = input.files.length ? input.files[0].name : '';
+            document.getElementById('file-name').textContent = fileName || '';
+            
+            // Thêm animation khi có file được chọn
+            if (fileName) {
+                document.getElementById('file-name').style.animation = 'slideIn 0.3s ease';
+            }
+        }
+
+        // Định dạng nội dung câu trả lời
+        function formatAnswer() {
+            const answer = document.querySelector('.answer');
+            if (answer) {
+                const text = answer.innerHTML;
+                const paragraphs = text.split('**').filter(p => p.trim());
+                answer.innerHTML = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+            }
+        }
+
+        // Chạy function khi trang load xong
+        window.addEventListener('load', formatAnswer);
+    </script>
+</body>
+</html>

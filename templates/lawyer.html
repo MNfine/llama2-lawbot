@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Giới thiệu Luật sư Hồ Trung Châu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
+            color: #1a237e;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .lawyer-container {
+            max-width: 520px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(33, 150, 243, 0.10);
+            padding: 36px 32px 28px 32px;
+            text-align: center;
+            position: relative;
+        }
+        .lawyer-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #e3f2fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.08);
+        }
+        .lawyer-avatar .material-icons {
+            font-size: 54px;
+            color: #1565c0;
+        }
+        .lawyer-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0d47a1;
+            margin-bottom: 6px;
+        }
+        .lawyer-title {
+            font-size: 1.08rem;
+            color: #1976d2;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .lawyer-info {
+            font-size: 1.05rem;
+            color: #333;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+        .lawyer-highlight {
+            background: linear-gradient(90deg, #fffde7 0%, #e3f2fd 100%);
+            border-left: 5px solid #e07a5f;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            color: #1a237e;
+            font-size: 1.08rem;
+            font-weight: 500;
+            text-align: justify;
+        }
+        .lawyer-contact {
+            margin-top: 18px;
+            font-size: 1.08rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+        .lawyer-contact .material-icons {
+            vertical-align: middle;
+            font-size: 22px;
+            color: #1565c0;
+            margin-right: 4px;
+        }
+        .back-link {
+            position: absolute;
+            left: 24px;
+            top: 24px;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 1rem;
+        }
+        .back-link .material-icons {
+            font-size: 20px;
+        }
+        @media (max-width: 600px) {
+            .lawyer-container {
+                padding: 16px 6vw 18px 6vw;
+            }
+            .back-link {
+                left: 8px;
+                top: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lawyer-container">
+        <a href="{{ url_for('index') }}" class="back-link">
+            <span class="material-icons">arrow_back</span> Trang chủ
+        </a>
+        <div class="lawyer-avatar">
+            <span class="material-icons">gavel</span>
+        </div>
+        <div class="lawyer-name">Luật sư Hồ Trung Châu</div>
+        <div class="lawyer-title">Đoàn luật sư TP. Hồ Chí Minh</div>
+        <div style="margin: 18px 0;">
+            <span style="display: inline-block; background: #1565c0; color: #fff; font-weight: 600; border-radius: 8px; padding: 6px 18px; font-size: 1.08rem; letter-spacing: 1px; box-shadow: 0 2px 8px rgba(33,150,243,0.10);">
+                CCHNLS: 20950/TP/LS-CCHN &nbsp;|&nbsp; Ngày cấp: 17/10/2022
+            </span>
+        </div>
+        <div class="lawyer-highlight" style="font-size:1.13rem; background: linear-gradient(90deg, #fffde7 0%, #e3f2fd 100%); border-left: 5px solid #e07a5f; color: #1a237e; text-align: justify;">
+            <span class="material-icons" style="vertical-align: middle; color: #e07a5f; font-size: 28px; margin-right: 6px;">star</span>
+            <b>Luật sư chuyên nghiệp – Uy tín – Tận tâm</b>
+            <br>
+            <span style="font-weight: 400;">
+                Với hơn 30 năm kinh nghiệm tư vấn và tranh tụng, Luật sư Hồ Trung Châu đã đồng hành cùng hàng trăm khách hàng, giải quyết thành công nhiều vụ việc pháp lý phức tạp về dân sự, đất đai, doanh nghiệp, hôn nhân gia đình, hình sự...
+                <br><br>
+                <span style="color:#1565c0; font-weight:600;">Cam kết:</span> <br>
+                <span class="material-icons" style="font-size:18px;vertical-align:middle;color:#43a047;">check_circle</span> Bảo mật tuyệt đối thông tin khách hàng<br>
+                <span class="material-icons" style="font-size:18px;vertical-align:middle;color:#43a047;">check_circle</span> Tư vấn tận tâm, giải pháp thực tiễn<br>
+                <span class="material-icons" style="font-size:18px;vertical-align:middle;color:#43a047;">check_circle</span> Hỗ trợ trọn gói mọi thủ tục pháp lý<br>
+                <span class="material-icons" style="font-size:18px;vertical-align:middle;color:#43a047;">check_circle</span> Đại diện tranh tụng chuyên nghiệp, hiệu quả
+            </span>
+        </div>
+        <div class="lawyer-contact" style="margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 24px;">
+            <span style="display: flex; align-items: center; gap: 4px;">
+                <span class="material-icons" style="color:#e07a5f;">call</span>
+                <a href="tel:0374799888" style="color:#1565c0; text-decoration:none; font-weight:700; font-size:1.08rem;">0374 799 888</a>
+            </span>
+            <span style="display: flex; align-items: center; gap: 4px;">
+                <span class="material-icons" style="color: #e07a5f; vertical-align:middle;">email</span>
+                <span style="vertical-align:middle; color:#1565c0; font-weight:600; font-size:1.08rem;">hotrungchau.law@gmail.com</span>
+            </span>
+        </div>
+        <div style="margin-top: 28px;">
+            <a href="tel:0374799888" style="background: linear-gradient(90deg,#1976d2,#e07a5f); color:#fff; font-weight:600; border-radius:24px; padding:12px 32px; text-decoration:none; font-size:1.13rem; box-shadow:0 2px 12px rgba(33,150,243,0.10); display:inline-block; transition:background 0.2s;">
+                <span class="material-icons" style="vertical-align:middle; font-size:22px;">phone_in_talk</span>
+                Nhận tư vấn trực tiếp
+            </a>
+        </div>
+    </div>
+</body>
+</html>
