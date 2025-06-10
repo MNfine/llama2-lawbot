@@ -6,7 +6,6 @@ import redis
 import numpy as np
 import torch
 import re
-from dotenv import load_dotenv
 
 from sentence_transformers import SentenceTransformer
 from transformers import (
@@ -16,7 +15,15 @@ from transformers import (
 )
 from peft import PeftModel
 
-load_dotenv()
+# Tự động load token từ .env nếu có
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    token = os.getenv("HUGGINGFACE_TOKEN")
+    if token:
+        os.environ["HUGGINGFACE_HUB_TOKEN"] = token
+except ImportError:
+    pass
 
 # --------------------------------------------
 # 1. CẤU HÌNH CHUNG
@@ -25,9 +32,6 @@ load_dotenv()
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6380))
 INDEX_NAME = "idx:law"
-
-# Load Hugging Face token from environment
-HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
 # Số chunk lấy về (top_k) và ngưỡng similarity
 TOP_K = 3  # Giảm số chunk lấy về để prompt ngắn hơn
@@ -41,7 +45,7 @@ ADAPTER_PATH   = "qlora_lawbot_output"
 # 2. KẾT NỐI REDIS và SBERT embedder (dim=384)
 # --------------------------------------------
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
-sbert = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v2") # Model phù hợp cho tiếng Việt
+sbert = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2") # Model phù hợp cho tiếng Việt
 
 
 def get_query_embedding(text: str) -> bytes:

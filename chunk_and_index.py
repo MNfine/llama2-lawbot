@@ -7,6 +7,16 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from typing import List
 
+# Tự động load token từ .env nếu có
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    token = os.getenv("HUGGINGFACE_TOKEN")
+    if token:
+        os.environ["HUGGINGFACE_HUB_TOKEN"] = token
+except ImportError:
+    pass
+
 # --------------------------------------------
 # 1. Cấu hình kết nối Redis Stack và embedder SBERT
 # --------------------------------------------
@@ -21,7 +31,7 @@ INDEX_NAME = "idx:law"
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 # Khởi tạo SentenceTransformer
-sbert = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v2")
+sbert = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 
 # --------------------------------------------
