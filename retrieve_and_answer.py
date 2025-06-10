@@ -41,7 +41,7 @@ ADAPTER_PATH   = "qlora_lawbot_output"
 # 2. KẾT NỐI REDIS và SBERT embedder (dim=384)
 # --------------------------------------------
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
-sbert = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2") # Model phù hợp cho tiếng Việt
+sbert = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v2") # Model phù hợp cho tiếng Việt
 
 
 def get_query_embedding(text: str) -> bytes:

@@ -11,7 +11,7 @@ INDEX_NAME = "idx:law"
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 # Khởi tạo SentenceTransformer
-sbert = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+sbert = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v2")
 
 def get_embedding(text: str) -> bytes:
     emb = sbert.encode(text, convert_to_numpy=True, normalize_embeddings=True)
