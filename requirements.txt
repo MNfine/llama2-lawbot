@@ -25,3 +25,4 @@ flask_mail
 flask_dance
 google-auth
 google-api-python-client
+huggingface_hub
