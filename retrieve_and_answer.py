@@ -16,12 +16,14 @@ from transformers import (
 from peft import PeftModel
 
 # Tự động load token từ .env nếu có
+HF_TOKEN = None
 try:
     from dotenv import load_dotenv
     load_dotenv()
     token = os.getenv("HUGGINGFACE_TOKEN")
     if token:
         os.environ["HUGGINGFACE_HUB_TOKEN"] = token
+        HF_TOKEN = token
 except ImportError:
     pass
 
